@@ -14,19 +14,22 @@ body {
 
 .footer {
     padding: 10px;
+    background-color: #F1F1F1;
 }
 
 p {
     font-family: "Times New Roman", Times, serif;
   }
 
+  /*
 .lastResult {
   color: white;
   padding: 3px;
 }
+*/
 
 img {
-    width: 40%;
+    width: 30%;
     height: auto;
   }
 
