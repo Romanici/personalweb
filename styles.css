@@ -8,6 +8,10 @@ body {
   font-family: sans-serif;
 }
 
+p {
+    font-family: "Palatino", "Times New Roman", Times, serif;
+  }
+
 .lastResult {
   color: white;
   padding: 3px;
