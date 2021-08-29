@@ -5,8 +5,11 @@ body {
   max-width: 800px;
   min-width: 480px;
   margin: 0 auto;
+  /*
   font-family: "Palatino","Times New Roman", Times, serif;
-  /*font-family: sans-serif;*/
+  font-family: sans-serif;*/
+  text-align: left;
+  font-family: 'Courier Prime', monospace;
 }
 
 header {
@@ -20,8 +23,8 @@ footer {
 }
 
 p {
-    font-weight:500;
-    font-family: "Times New Roman", Times, serif;
+    font-weight:300;
+    /*font-family: "Times New Roman", Times, serif;*/
   }
 
   /*
