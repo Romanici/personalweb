@@ -5,6 +5,7 @@ body {
   max-width: 800px;
   min-width: 480px;
   margin: 0 auto;
+  font-family: "Palatino","Times New Roman", Times, serif;
   /*font-family: sans-serif;*/
 }
 
@@ -13,12 +14,13 @@ header {
 }
 
 footer {
-    padding: 10px;
-    text-align: center;
-    color: rgb(71, 69, 69);
+    padding: 15px;
+    text-align: right;
+    color: rgb(77, 74, 74);
 }
 
 p {
+    font-weight:500;
     font-family: "Times New Roman", Times, serif;
   }
 
@@ -36,7 +38,7 @@ img {
 
 li {
     list-style-type: none;
-    margin: 10px 0;
+    margin: 8px 0;
 }
 
 
@@ -58,7 +60,7 @@ li {
   }
   
   a:visited {
-    color: green;
+    color: rgb(18, 182, 18);
     text-decoration: none;
   }
 
