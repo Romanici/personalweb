@@ -7,14 +7,17 @@ body {
   margin: 0 auto;
   /*
   font-family: "Palatino","Times New Roman", Times, serif;
-  font-family: sans-serif;*/
+  font-family: sans-serif;
   text-align: left;
   font-family: 'Courier Prime', monospace;
+  */
 }
 
+/*
 header {
     padding: 15px;
 }
+*/
 
 footer {
     padding: 15px;
@@ -39,13 +42,23 @@ img {
     height: auto;
   }
 
-li {
+ol {
     list-style-type: none;
+    padding-left: 0;
+}
+
+li {
     margin: 8px 0;
+}
+
+h3 {
+    padding-top: 15px;
 }
 
 
   .project_list {
+    
+    list-style-type: none;
     /*
     width: 15em;
     border: 1px solid #333;
@@ -57,13 +70,13 @@ li {
   }
 
 
-  a:link {
-    color: rgb(212, 122, 137);
+a:link {
+    /*color: rgb(212, 122, 137);*/
     text-decoration: none;
   }
   
-  a:visited {
-    color: rgb(18, 182, 18);
+a:visited {
+    /*color: rgb(18, 182, 18);*/
     text-decoration: none;
   }
 
