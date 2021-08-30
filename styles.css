@@ -9,8 +9,9 @@ body {
   font-family: "Palatino","Times New Roman", Times, serif;
   font-family: sans-serif;
   text-align: left;
-  font-family: 'Courier Prime', monospace;
   */
+  font-family: 'Courier Prime', monospace;
+
 }
 
 /*
@@ -40,6 +41,7 @@ p {
 img {
     width: 30%;
     height: auto;
+    padding-top: 50px;
   }
 
 ol {
@@ -48,11 +50,11 @@ ol {
 }
 
 li {
-    margin: 8px 0;
+    margin: 10px 0;
 }
 
 h3 {
-    padding-top: 15px;
+    padding-top: 18px;
 }
 
 
@@ -81,7 +83,7 @@ a:visited {
   }
 
 a:hover {
-    background-color: #f44336;
+    background-color: #ee5146;
     color: white;
     text-decoration: none;
     display: inline-block;
@@ -91,3 +93,21 @@ a:hover {
 .final_p {
     padding-top:"10px";
 }
+
+
+
+html {
+    cursor: none;
+  }
+  
+  #circularcursor {
+    background-color: transparent;
+    border:1px solid black;    
+    height:15px;
+    width:15px;
+    border-radius:50%;
+    -moz-border-radius:50%;
+    -webkit-border-radius:50%;
+    position: absolute;
+    z-index: 1;
+  }
