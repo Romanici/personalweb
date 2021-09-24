@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8" > 
+    <meta name="author" content="Agustin Fernández Felguera">
+
+    <link rel="stylesheet" href="../styles.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="../main.js"></script> 
+
+    <title>Hexagonal heatmap</title>
+
+  </head>
+
+<!-- Last updated: 3 September 2021 -->
+
+
+  <body>
+    <div id="circularcursor"></div>
+
+    <h1>Hexagonal heatmap</h1>
+
+<p>
+<b> Overplotting </b> is when the data or labels in a data visualization overlap, making it difficult to see individual data points in a data visualization.
+</p>
+
+<p>
+If the amount of overplotting is low, you may be able to alleviate the problem by using smaller points, or by using a different shape (like shape 1, a hollow circle) through which other points can be seen.
+</p>
+<p>
+If there’s a high degree of overplotting, there are a number of possible solutions:
+
+Make the points semi-transparent
+Bin the data into rectangles (better for quantitative analysis)
+Bin the data into hexagons
+Use box plots (when possible)
+Jitter points
+</p>
+
+A bit of explanation is here <a href="https://r-graphics.org/recipe-scatter-overplot">r-graphics.org</a>.
+
+
+    <a href="https://ggplot2.tidyverse.org/reference/geom_hex.html">Documentation of geom_hex</a>
+    <a href="https://juliasilge.com/blog/nyc-airbnb/">here</a>
+    <a href="http://varianceexplained.org/r/sliced-ml/?utm_source=pocket_mylist">here</a>
+
+    Google Maps Platform, overview
+    <a href="https://developers.google.com/maps/documentation/maps-static/overview">here</a>
+    
+
+    In making these plots I spent approximately 0.1 euros using the Geocoding API of Google Maps. Though they currently give you a credit of 255 euros for 90 days, so I actually use the service for free. 
+
+
+It's important to consider how many points are per hexagon (or bin). I there are very few the average may not be very informative (overfitting), if there are too much (and too few bins) you will not be able to see the differences. 
+<figure>
+  <img class= "R_output" src="hex_heatmap.png">  
+  <figcaption>Fig.1 - Hexagonal heatmap without map.</figcaption>
+</figure>
+
+ggplot’s stat_density2d, which uses MASS::kde2d on the backend to estimate the density using a bivariate normal kernel.
+
+<figure>
+  <img class= "R_output" src="density_heatmap.png">   
+  <figcaption>Fig.2 - Density heatmap without map.</figcaption>
+</figure>
+
+We have to be cautious with images with a lot of points, this one weights 1.9 MB 
+
+<figure>
+  <img class= "R_output" src="points_map.png">   
+  <figcaption>Fig.3 - Basic points in a map.</figcaption>
+</figure>
+
+
+<figure>
+  <img class= "R_output" src="agg_freq_map.png"> 
+  <figcaption>Fig.4 - Aggregated frequency in a map.</figcaption>
+</figure>     
+
+    It could be possible to combine # of listings and price in a single geom, price categorized.
+
+<figure>
+  <img class= "R_output" src="agg_hex_map.png">  
+  <figcaption>Fig.5 - Hexagonal heatmap in a map.</figcaption>
+</figure>
+
+
+
+
+
+
+  </body>
+
+
+</html>
