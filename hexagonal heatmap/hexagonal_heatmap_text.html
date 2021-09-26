@@ -25,21 +25,29 @@
 <b> Overplotting </b> is when the data or labels in a data visualization overlap, making it difficult to see individual data points in a data visualization.
 </p>
 
+</p>
+
+</p>
+
 <p>
 If the amount of overplotting is low, you may be able to alleviate the problem by using smaller points, or by using a different shape (like shape 1, a hollow circle) through which other points can be seen.
 </p>
 <p>
 If there’s a high degree of overplotting, there are a number of possible solutions:
-
-Make the points semi-transparent
-Bin the data into rectangles (better for quantitative analysis)
-Bin the data into hexagons
-Use box plots (when possible)
-Jitter points
 </p>
 
-A bit of explanation is here <a href="https://r-graphics.org/recipe-scatter-overplot">r-graphics.org</a>.
+<ul>
+  <li>Make the points semi-transparent</li>
+  <li>Bin the data into rectangles (better for quantitative analysis)</li>
+  <li>Bin the data into hexagons</li>
+  <li>Use box plots (when possible)</li>
+  <li>Jitter points</li>
+</ul>
 
+
+
+<p>
+A bit of explanation is here <a href="https://r-graphics.org/recipe-scatter-overplot">r-graphics.org</a>.
 
     <a href="https://ggplot2.tidyverse.org/reference/geom_hex.html">Documentation of geom_hex</a>
     <a href="https://juliasilge.com/blog/nyc-airbnb/">here</a>
@@ -49,40 +57,51 @@ A bit of explanation is here <a href="https://r-graphics.org/recipe-scatter-over
     <a href="https://developers.google.com/maps/documentation/maps-static/overview">here</a>
     
 
-    In making these plots I spent approximately 0.1 euros using the Geocoding API of Google Maps. Though they currently give you a credit of 255 euros for 90 days, so I actually use the service for free. 
+    In making these plots I spent theoretically 0.1 euros using the Geocoding API of Google Maps. Though they currently give you a credit of 255 euros for 90 days, so I actually use the service for free. 
+
+  </p>
+
+<p>
+It's important to consider how many points are per hexagon (or bin). I there are very few the average may not be very informative (overfitting), if there are too much (and too few bins) you will not be able to see the differences.
+</p>
 
 
-It's important to consider how many points are per hexagon (or bin). I there are very few the average may not be very informative (overfitting), if there are too much (and too few bins) you will not be able to see the differences. 
 <figure>
   <img class= "R_output" src="hex_heatmap.png">  
-  <figcaption>Fig.1 - Hexagonal heatmap without map.</figcaption>
+  <figcaption>Fig.1 - Hexagonal heatmap without map</figcaption>
 </figure>
 
+<p>
 ggplot’s stat_density2d, which uses MASS::kde2d on the backend to estimate the density using a bivariate normal kernel.
+</p>
 
 <figure>
   <img class= "R_output" src="density_heatmap.png">   
-  <figcaption>Fig.2 - Density heatmap without map.</figcaption>
+  <figcaption>Fig.2 - Density heatmap</figcaption>
 </figure>
 
+</p>
 We have to be cautious with images with a lot of points, this one weights 1.9 MB 
+<p>
 
 <figure>
   <img class= "R_output" src="points_map.png">   
-  <figcaption>Fig.3 - Basic points in a map.</figcaption>
+  <figcaption>Fig.3 - Basic points in the map of Barcelona</figcaption>
 </figure>
 
 
 <figure>
   <img class= "R_output" src="agg_freq_map.png"> 
-  <figcaption>Fig.4 - Aggregated frequency in a map.</figcaption>
+  <figcaption>Fig.4 - Aggregated frequency</figcaption>
 </figure>     
 
-    It could be possible to combine # of listings and price in a single geom, price categorized.
+<p>
+It could be possible to combine # of listings and price in a single geom, price categorized.
+</p>
 
 <figure>
   <img class= "R_output" src="agg_hex_map.png">  
-  <figcaption>Fig.5 - Hexagonal heatmap in a map.</figcaption>
+  <figcaption>Fig.5 - Hexagonal heatmap</figcaption>
 </figure>
 
 
