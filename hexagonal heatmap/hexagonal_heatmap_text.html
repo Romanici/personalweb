@@ -22,17 +22,15 @@
     <h1>Hexagonal heatmap</h1>
 
 <p>
-<b> Overplotting </b> is when the data or labels in a data visualization overlap, making it difficult to see individual data points in a data visualization.
-</p>
-
-</p>
-
+I was watching some videos about a ML competition SLICED <a href="https://juliasilge.com/blog/nyc-airbnb/">here</a>, 
+and I saw the use of what I thought was a very interesting plot and it is called hexagonal heatmap. It is very useful to represent the density of geographical data, where you have three dimensions: Longitude, latitude and the variable of interest.
+In particular, the hexagons are very useful to avoid overplotting. 
+<b> Overplotting </b> happens when the data or labels in a data visualization overlap, making it difficult to see individual data points in a data visualization.
 </p>
 
 <p>
-If the amount of overplotting is low, you may be able to alleviate the problem by using smaller points, or by using a different shape (like shape 1, a hollow circle) through which other points can be seen.
-</p>
-<p>
+If the amount of overplotting is low, you may be able to alleviate the problem by using smaller points, or by using a different shape (like shape 1, a hollow circle) 
+through which other points can be seen.
 If there’s a high degree of overplotting, there are a number of possible solutions:
 </p>
 
@@ -45,12 +43,30 @@ If there’s a high degree of overplotting, there are a number of possible solut
 </ul>
 
 
+<!-- 
+Prices of 50,000 round cut diamonds, according to their carat (weight).  
+<figure>
+  <img class= "R_output" src="ejemplo_hex_diamonds.png">  
+  <figcaption>Fig 0. Example hexagonal map</figcaption>
+</figure>
+-->
+
+</p>
+</p>
+
+
+  <h2>Trying the plot in Barcelona airbnb's data</h2>
+
+</p>
+I used ggplot2.
+
+</p>
+
 
 <p>
 A bit of explanation is here <a href="https://r-graphics.org/recipe-scatter-overplot">r-graphics.org</a>.
 
     <a href="https://ggplot2.tidyverse.org/reference/geom_hex.html">Documentation of geom_hex</a>
-    <a href="https://juliasilge.com/blog/nyc-airbnb/">here</a>
     <a href="http://varianceexplained.org/r/sliced-ml/?utm_source=pocket_mylist">here</a>
 
     Google Maps Platform, overview
@@ -96,8 +112,11 @@ We have to be cautious with images with a lot of points, this one weights 1.9 MB
 </figure>     
 
 <p>
-It could be possible to combine # of listings and price in a single geom, price categorized.
+It could be possible to combine number of listings and price in a single geom, price categorized.
 </p>
+
+
+The variation is not clear. 
 
 <figure>
   <img class= "R_output" src="agg_hex_map.png">  

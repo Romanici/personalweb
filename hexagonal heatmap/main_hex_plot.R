@@ -7,7 +7,6 @@
 library(tidyverse)
 library(readr)
 
-
 df <- read_csv("Desktop/DS/web/personalweb/hexagonal heatmap/listings.csv")
 View(df)
 
@@ -134,7 +133,6 @@ aggregated_lat_lon <- df %>%
   filter(n >= 5)
 
 
-
 agg_freq_map <- ggmap(mapa_bcn_minimalist) +
   geom_point(aes(longitude, latitude, size = n, color = price ),
              data = aggregated_lat_lon) +
@@ -146,7 +144,7 @@ agg_freq_map <- ggmap(mapa_bcn_minimalist) +
        size = "# of listings") 
 
 
-agg_hex_map <- ggmap(mapa_bcn_minimalist) +
+agg_points_map <- ggmap(mapa_bcn_minimalist) +
   geom_point(aes(longitude, latitude, size = n, color = price ),
              data = aggregated_lat_lon) +
   scale_color_gradient2(low = "#00008B", high = "darkred", midpoint = 2 ,
@@ -160,7 +158,7 @@ agg_hex_map <- ggmap(mapa_bcn_minimalist) +
 agg_hex_map <- ggmap(mapa_bcn_minimalist) +
   coord_cartesian() + 
   stat_summary_hex(data= df, aes(longitude, latitude, z = log(price)),
-                   alpha = 0.8, bins = 70) +
+                   alpha = 0.8, bins = 70) + 
   scale_fill_viridis_c() +
   labs(fill = "Mean price (log)")
 

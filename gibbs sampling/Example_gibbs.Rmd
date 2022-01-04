@@ -1,0 +1,279 @@
+---
+title: "An example of how to use the Gibbs sampler"
+output: html_document
+date: "`r format(Sys.time(), '%d %B %Y')`"
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(extraDistr)
+```
+
+
+I was watching some videos of the very recommended youtube list of Ben Lambert called A Student's Guide to Bayesian Statistics, and I found an example which I think it's pretty interesting. The video in question is this: [How to derive a Gibbs sampling routine in general](https://youtu.be/9e4uqODjooo). 
+
+Here, I just wanted to replicate his results by implementing the Gibbs algorithm in R and analyse a bit more the results. 
+
+## Problem
+
+* Each experiment consists in flipping a coin **n** times and counting the number of heads. 
+* We call the probability that the coin is head, as opposed to tail, as $\theta$. 
+* We repeat the experiment **K** times. 
+
+Basically we have a sample of $K$ binomials ($X \sim Bin(x,n,p)$) and we want to estimate both parameters of the distribution ($n$ and $\theta$). 
+
+
+**The notation is the following:**
+
+* $X:$ Number of heads in $n$ coin tosses
+* Repeat the experiment(X) K times: $X_1, ... , X_K$
+* We have 10 observations with the following values:  
+(2, 4, 3, 3, 3, 2, 3, 3, 4, 4)
+
+
+$$
+\text{Likelihood function for an } X_i: \\
+P(x_i|\theta,n) = Bin(x_i;p,n) = {n \choose x_i} \  \theta^{x_i} (1-\theta)^{n-x_i}
+\\
+Priors: \\
+\theta \sim U[0,1] = beta(1,1) \\
+n \sim DU[5,8]
+$$
+
+
+Since we want to infer the parameters, we have to estimate the posterior distribution. In order to do that, I will use the Gibbs sampling algorithm, which requires knowing the conditional distribution of each parameter. 
+
+<!-- $$ -->
+<!-- \Pi_i^K \ L_i =  {n \choose x_i} \  \theta^{x_i} (1-\theta)^{n-x_i} -->
+<!-- Posterior \propto Sample \ likelihood \times Prior -->
+<!-- $$ -->
+
+First we obtain the expression for the likelihood of the sample:
+
+$$
+P(n,\theta|x_1...x_K) \propto P(n,\theta,x_1...x_K) = P(x_1...x_K| n, \theta) \cdot P(n,\theta) \propto P(x_1...x_K| n, \theta) = \Pi^K_i P(x_i|n,\theta)
+$$
+$$
+\Pi^K_i P(x_i|n,\theta) =  \theta^{\sum x_i} (1-\theta)^{\sum n-x_i} \ \Pi_i^K \ {n \choose x_i} = \\
+= \theta^{K\bar{x}} (1-\theta)^{nK-k\bar{x} } \ \Pi_i^K \ {n \choose x_i}
+$$
+
+From here, we can deduce the conditional probabilities of the parameters:
+
+$$
+P(\theta|n,x_1...x_K) \propto \theta^{K\bar{x}} (1-\theta)^{nK-K\bar{x}} \\
+P(n|\theta,x_1...x_K) \propto (1-\theta)^{nK} \ \Pi_i^K \ {n \choose x_i}
+$$
+
+
+For the conditional of $\theta$ we can see that the functional form obtained resembles a beta distribution.  
+For the conditional of $n$ it's not as straigthforward to find the analytical form of the density function. But since $n$ can only take 4 values (according to our prior knowledge), it's easy to normalize the probabilities. 
+
+$$
+p_i = \frac{ (1-\theta)^{n_i K} \ \Pi_i^K \ {n_i \choose x_i} }{\sum_i^4 [(1-\theta)^{n_i K} \ \Pi_i^K \ {n_i \choose x_i} ] }
+$$
+Where $i \in {5,6,7,8}$.  
+We can consider $P(n|\theta,x_1...x_K)$ a categorical distribution (or generalized bernuilli) with 4 possible values and with the probabilities calculated as above. To sample from this distribution we can just use the function *rcat* from the package extraDistr.
+
+
+The code to sample from $n$ conditional is the following:
+
+```{r }
+categ.n <- function(theta, values_n, K, data){ 
+  # Inputs:
+  # theta: 
+  # values_n: values specified in the prior of n (in this case 5,6,7,8)
+  # K: number of experiments (in this case 0)
+  
+  # calculate the unnormalized P(n|·) for all the values of n
+  cond.n <- function(theta, values_n, K){ 
+   power <- (1-theta)^(values_n*K) 
+   prod_combn <- apply(sapply(data, choose, n=values_n ), 1,  prod)
+   return( power*prod_combn )
+  }
+  
+  # normalize each term by diving by the total
+  probabilities_n <- cond.n( theta, values_n, K ) / sum( cond.n( theta, values_n, K ) ) 
+  # using the probabilities calculated generate a random sample
+  random_n <- as.numeric( as.character( extraDistr::rcat(n=1, prob= probabilities_n, labels=values_n) ) )
+  
+  return(random_n)
+}
+```
+
+
+
+Therefore, the posterior distributions are: 
+
+$$
+P( \theta_{t+1}| \ n_t, \ x_1 ... x_K) \sim beta(K \cdot \bar{x} + 1, \ K(n-\bar{x}) + 1) \\
+P(n_{t+1}| \ \theta_{t+1}, \ x_1 ... x_K) \sim categ(p_1, p_2, p_3, p_4)
+$$
+
+<br>
+<br>
+
+## Implementation
+
+### Data
+
+We have 10 observations and so we can already see that $n$ has to be at least 4. 
+
+```{r }
+data = c(2, 4, 3, 3, 3, 2, 3, 3, 4, 4)
+summary(data)
+table(data)
+```
+
+
+### Steps of the Gibbs sampler
+<!-- **STEPS:** -->
+
+1. Derive an expression for the conditional distribution of each parameter
+2. Set some initial values for theta and n (within the support)
+3. Sample from $\theta_{t+1}|n_t,x_{1}...x_{K}$ and then from $n_{t+1}|\theta_{t+1},x_{1}...x_{K}$
+4. Repeat (3.) until you are reasonably sure that the convergence to the posterior is good
+5. Diagnostics and others
+
+
+### Gibbs sampler
+
+```{r eval=FALSE, include=FALSE}
+sampleGibbs <- function(ini.theta, ini.n, n.sims, data){
+  
+  K <- length(data)
+  avg <- mean(data)
+  values_n <- 5:8
+  
+  cond.n <- function(theta, values_n, K){ 
+   power <- (1-theta)^(values_n*K) 
+   prod_combn <- apply(sapply(data, choose, n=values_n ), 1,  prod)
+   return( power*prod_combn )
+   }
+  
+  # create empty matrix, allocate memory for efficiency
+  res <- matrix(NA, nrow = n.sims, ncol = 2)
+  res[1,] <- c(ini.theta,ini.n)
+  for (i in 2:n.sims){
+    # sample the values
+    res[i,1] <- rbeta(1, shape1= K*avg + 1, shape2= K*(res[i-1,2]-avg) + 1) 
+    prob_cond_n <- cond.n( res[i,1], values_n, K ) / sum( cond.n( res[i,1], values_n, K ) ) 
+    res[i,2] <- as.numeric( as.character( extraDistr::rcat(n=1, prob= prob_cond_n, labels=values_n) ) )
+  }
+  return(res)
+}
+```
+
+```{r }
+sampleGibbs <- function(ini.theta, ini.n, n.sims, data){
+  
+  K <- length(data)
+  avg <- mean(data)
+  values_n <- 5:8 # from the prior
+  
+  # create empty matrix, more efficient
+  sim <- matrix(NA, nrow = n.sims, ncol = 2)
+  sim[1,] <- c(ini.theta, ini.n)
+  
+  for (i in 2:n.sims){
+    # sample the values of the parameters
+    sim[i,1] <- rbeta(1, shape1= K*avg + 1, shape2= K*(sim[i-1,2]-avg) + 1) # theta
+    sim[i,2] <- categ.n(sim[i,1], values_n, K, data)                        # n
+  }
+  return(sim)
+}
+```
+
+
+## Results
+
+To get an idea of what the algorithm is doing we can try first with **50 iterations**. 
+
+```{r}
+n_simulations = 50
+
+# ini.theta= runif(1,0,1), ini.n=sample(5:8,1)
+results <- sampleGibbs(ini.theta= 0.5, ini.n= 6, n.sims= n_simulations, data= data)
+theta.post <- results[,1]
+n.post <- results[,2]
+```
+
+We can look at the joint density of $\theta$ and $n$, the traceplot for each parameter or the density of the posterior. 
+
+```{r}
+plot(n.post, theta.post, pch = 20, main="Joint plot of the parameters")
+
+par(mfrow=c(1,2), mar=c(5,2,2,1)+0.1)
+plot(1:n_simulations, theta.post, pch = 20, main="Traceplot for theta", xlab="Iterations")
+plot(1:n_simulations, n.post, pch = 20, main="Traceplot for n", xlab="Iterations")
+
+plot(density(theta.post), main="Posterior density of theta")
+barplot(table(n.post)/n_simulations, main="Posterior frequency of n")
+
+```
+
+<br>
+<br>
+
+**Using 10000 iterations**
+
+```{r}
+n_simulations = 10000
+
+# ini.theta= runif(1,0,1), ini.n=sample(5:8,1)
+results <- sampleGibbs(ini.theta= 0.5, ini.n= 6, n.sims= n_simulations, data= data)
+theta.post <- results[,1]
+n.post <- results[,2]
+```
+
+```{r }
+par(mfrow=c(1,2), mar=c(5,2,2,1)+0.1)
+plot(density(theta.post), main="Posterior density of theta")
+barplot(table(n.post)/n_simulations, main="Posterior frequency of n")
+
+summary(theta.post)
+summary(n.post)
+```
+
+To estimate $\theta$ and $n$ we can look at the mean (if we are interested in the bayes estimator of the squared error loss), the median or the mode. 
+Using the mean the estimation of $\theta$ would be 0.55. For $n$ we have 5.8 but since it's a discrete R.V. we should adjust that value. In any case, we can see that most of the density for $\theta$ is condensed between 0.4 and 0.7 and for $n$ it's between 5 and 6. 
+
+<br>
+
+
+## Simulating data
+
+To see the difference between the estimation and the real values, I simulate a sample of 20 observations using $X \sim Bin(x,n= 6, p=0.8)$. 
+
+```{r}
+# Parameters n=6 and theta=0.8
+set.seed(11)
+generated_data = rbinom(n= 20, size= 6, prob= 0.8)
+
+n_simulations = 10000
+
+# same initialisation values as before
+results <- sampleGibbs(ini.theta= 0.5, ini.n= 6, n.sims= n_simulations, data= generated_data)
+theta.post <- results[,1]
+n.post <- results[,2]
+
+summary(theta.post)
+summary(n.post)
+
+```
+
+
+In the case of $\theta$, the estimation using the mean is 0.81, which is close to the real value, but there is still a big margin for improvement.
+
+### Further improvements
+
+* **Diagnostics**: I have shown the traceplot but you could also calculate some statistics etc.
+* **Burn-in**: Remove the first N (100?) iterations. 
+* Use of **multiple chains** (probably the most important improvement).
+* **Remove consecutive observations** to avoid dependance. Estimate efective sample size. 
+
+<br>
+
+
