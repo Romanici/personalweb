@@ -75,11 +75,13 @@ h3 {
 
 a:link {
     /*color: rgb(212, 122, 137);*/
+    color: rgb(57, 203, 205);
     text-decoration: none;
   }
   
 a:visited {
     /*color: rgb(18, 182, 18);*/
+    color: rgb(217, 161, 219);
     text-decoration: none;
   }
 
