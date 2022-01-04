@@ -4,6 +4,13 @@ output: html_document
 date: "`r format(Sys.time(), '%d %B %Y')`"
 ---
 
+<br>
+
+<style type="text/css">
+  body{
+  font-size: 12pt;
+  }
+</style>
 
 
 ```{r setup, include=FALSE}
@@ -14,7 +21,9 @@ library(extraDistr)
 
 I was watching some videos of the very recommended youtube list of Ben Lambert called A Student's Guide to Bayesian Statistics, and I found an example which I think it's pretty interesting. The video in question is this: [How to derive a Gibbs sampling routine in general](https://youtu.be/9e4uqODjooo). 
 
-Here, I just wanted to replicate his results by implementing the Gibbs algorithm in R and analyse a bit more the results. 
+Here, I just wanted to replicate his results by implementing the Gibbs algorithm in R and analyse a bit more the results.
+
+<br>
 
 ## Problem
 
