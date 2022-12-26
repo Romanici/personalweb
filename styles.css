@@ -40,7 +40,7 @@ p {
 */
 
 img {
-    width: 40%;
+    width: 90%;
     height: auto;
     padding-top: 50px;
   }
@@ -98,11 +98,11 @@ a:hover {
 }
 
 
-
+  /*
 html {
     cursor: none;
   }
-  
+
   #circularcursor {
     background-color: transparent;
     border:1px solid black;    
@@ -114,7 +114,7 @@ html {
     position: absolute;
     z-index: 1;
   }
-
+*/
 
 
 /* styles of the notes */
