@@ -2,9 +2,11 @@
 
 body {
   width: 50%;
-  max-width: 800px;
-  min-width: 480px;
+  max-width: 1200px;
+  min-width: 600px;
   margin: 0 auto;
+  margin-top: 100px;
+  margin-bottom:100px;
   /*
   font-family: "Palatino","Times New Roman", Times, serif;
   font-family: sans-serif;
@@ -75,13 +77,13 @@ h3 {
 
 a:link {
     /*color: rgb(212, 122, 137);*/
-    color: rgb(57, 203, 205);
+    color: rgb(15, 144, 147);
     text-decoration: none;
   }
   
 a:visited {
     /*color: rgb(18, 182, 18);*/
-    color: rgb(217, 161, 219);
+    color: rgb(204, 107, 208);
     text-decoration: none;
   }
 
@@ -96,6 +98,14 @@ a:hover {
 .final_p {
     padding-top:"10px";
 }
+
+
+
+.highlight_p {
+  color:rgb(15, 144, 147);
+}
+
+
 
 
   /*
